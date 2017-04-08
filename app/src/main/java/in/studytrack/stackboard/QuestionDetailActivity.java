@@ -194,7 +194,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
             try {
 
                  document = Jsoup.connect(link).get();
-
+                title = document.title();
 //                htmlData = document.getElementById("answer-43284244").outerHtml();
 return document;
             } catch (IOException e) {
@@ -207,6 +207,9 @@ return document;
         protected void onPostExecute(Document Response) {
             super.onPostExecute(Response);
             dialog.dismiss();
+            TextView txt = (TextView) findViewById(R.id.title);
+            txt.setText(title);
+
            for(int i=0;i<answerList.size();i++)
            {
                htmlData = Response.getElementById("answer-"+answerList.get(i).getId()).outerHtml();
