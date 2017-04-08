@@ -7,76 +7,66 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import java.util.List;
 
+
 /**
  * Created by Neeraj on 19/03/17.
  */
-public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyViewHolder> {
-    private String TAG = QuestionsAdapter.class.getSimpleName();
+public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.MyViewHolder> {
+    private String TAG = AnswersAdapter.class.getSimpleName();
     private Context mContext;
-    private List<Question> questionList;
+    private List<Answer> answerList;
+    private String htmlData;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, vote,owner;
+        public WebView title;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            vote = (TextView) view.findViewById(R.id.score);
-            owner = (TextView) view.findViewById(R.id.owner);
+            title = (WebView) view.findViewById(R.id.title);
+
 
 
         }
     }
 
 
-    public QuestionsAdapter(Context mContext, List<Question> questionList) {
+    public AnswersAdapter(Context mContext, List<Answer> answerList) {
         this.mContext = mContext;
-        this.questionList = questionList;
+        this.answerList = answerList;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.question_card, parent, false);
+                .inflate(R.layout.answer_card, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Question question = questionList.get(position);
-        holder.title.setText(question.getTitle());
-        holder.vote.setText(question.getVote());
-        holder.owner.setText(question.getOwner());
+        final Answer answer = answerList.get(position);
+        htmlData = "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /> <style type=\"text/css\">\n" +
 
+                ".answer accepted-answer {width:10%;}\n" +
+                "p {margin-left:20px;}\n" +
 
-
-
-
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Intent intent = new Intent(mContext, QuestionDetailActivity.class);
-                Log.e(TAG, "True"+ question.getLink());
-                intent.putExtra("link", question.getLink());
-                intent.putExtra("question_id", question.getId());
-
-                mContext.startActivity(intent);
+                "</style></head>" + answer.getLink();
+        holder.title.loadDataWithBaseURL("file:///android_assets/.", htmlData, "text/html", "UTF-8", null);
+        Log.e(TAG, htmlData );
 
 
 
 
 
 
-            }
-        });
+
+
     }
 
 //    /**
@@ -116,6 +106,6 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return questionList.size();
+        return answerList.size();
     }
 }

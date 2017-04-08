@@ -62,18 +62,13 @@ private TextView title;
     private Button more;
     private JSONObject json;
     private JSONObject ow;
+    private String link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
-
+        
 
 
         questionList = new ArrayList<>();
@@ -190,7 +185,8 @@ json=null;
                     question.setTitle(js.getString("title"));
                     question.setVote(js.getString("score"));
                     question.setOwner(js.getJSONObject("owner").getString("display_name"));
-
+                    question.setLink(js.getString("link"));
+                    question.setId(js.getString("question_id"));
                     questionList.add(question);
 
                 } catch (JSONException e) {
